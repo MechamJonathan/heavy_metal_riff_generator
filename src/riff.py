@@ -1,10 +1,9 @@
 import random
-from tuning import low_E
 
 class Riff():
-    def __init__(self, scale_notes, tuning_notes=""):
+    def __init__(self, scale_notes, tuning):
         self.scale_notes = scale_notes
-        self.tuning_notes = tuning_notes
+        self.tuning = tuning
         self.rhythm_patterns = [
         [1, 0, 1, 0, 1, 0, 1, 1], #fat chugs
         [1, 0, 1, 1, 0, 1, 0, 1]  #syncropated
@@ -12,72 +11,44 @@ class Riff():
 
 
     def generate(self):
-        #scale_notes = self.scale[f"{self.key}_{self.scale}"]
         riff = []
-        rhythm = random.choice(self.rhythm_patterns)
+        pattern = random.choice(self.rhythm_patterns) 
 
-        for beat in rhythm:
-            if beat == 1:
+        bar = [] 
+        for beat in pattern:
+            if beat == 1: 
+                string_index = random.randint(0, 2)
                 note = random.choice(self.scale_notes)
-                riff.append(low_E.index(note))
-
+                bar.append((string_index, self.tuning.strings[string_index].index(note)))
             else:
-                riff.append(0)
+                bar.append((0, 0))
+
+        riff.append(bar)
         return riff
 
+    def generate_bar_chords(self):
+        riff = []
+        pattern = random.choice(self.rhythm_patterns) 
 
+        bar = []
 
-# def generate_metal_riff(key, scale):
-#     scale_notes = scales[f"{key}_{scale}"]
-#     riff = []
-#     rhythm = random.choice(rhythm_patterns)
-#     for beat in rhythm:
-        
-#         if beat == 1:
-#             note = random.choice(scale_notes)
-#             riff.append(low_E.index(note))
+        for beat in pattern:
+            if beat == 1: 
+                string_index = random.randint(0, len(self.tuning.strings) - 1)
+                note = random.choice(self.scale_notes)
 
-#         else:
-#             riff.append(0)
-#     return riff
+                root_string = random.randint(0, len(self.tuning.strings) - 3)
+                bar_chord_fret = random.randint(0, 11) 
 
+                bar_chord = [
+                    (root_string, f"{bar_chord_fret}"),         
+                    (root_string + 1, f"{bar_chord_fret + 2}"),      
+                    (root_string + 2, f"{bar_chord_fret + 2}"),       
+                ]
+                bar.append(bar_chord) 
 
-# def to_tabs(riff):
-#     tabs = ["E|", "B|", "G|", "D|", "A|", "E|"]
-#     for note in riff:
-#         for i in range(0, len(tabs)):
-#             if i == 5:
-#                 tabs[i] += f"{note}--"
-#             else:
-#                 tabs[i] += "---"
-#     return tabs
+            else:  
+                bar.append((0,0))
 
-
-
-
-
-
-# def generate_riff(key="E", scale="Minor", tuning="Standard_E"):
-#     scale_notes = scales.get(f"{key}_{scale}", scales["E_Minor"])
-#     #guitar_tuning = tunings.get(f"{tuning}", tunings["Standard"])
-
-#     riff = []
-#     for _ in range(4): #4 beats per measure
-#         bar = []
-#         for beat in rhythm_patterns[random.randint(0, len(rhythm_patterns) - 1)]:
-#             if beat == 1:
-#                 note = random.choice(scale_notes)
-#                 bar.append(note)
-#             else:
-#                 bar.append("-")
-#         riff.append(bar)
-#     return riff
-
-# def generate_tabs(riff):
-#     tablature = ["E|", "B|", "G|", "D|", "A|", "E|"]
-#     for bar in riff:
-#         for i, note in enumerate(bar):
-#             tablature[i] += f"{note}--"
-#     return tablature
-    
-
+        riff.append(bar)  
+        return riff

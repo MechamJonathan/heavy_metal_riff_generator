@@ -16,7 +16,7 @@ def main():
     chosen_tuning = Tuning(tuning)
     tuning_notes = chosen_tuning.get_tuning()
 
-    riff = Riff(chosen_scale_notes).generate()
+    riff = Riff(chosen_scale_notes, chosen_tuning).generate_bar_chords()
     tabs = TabsFormatter(riff, tuning_notes)
 
     print("\nGenerated Riff:\n")
