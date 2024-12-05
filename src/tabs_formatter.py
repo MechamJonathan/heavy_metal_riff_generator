@@ -32,6 +32,10 @@ class TabsFormatter():
                             tabs[i] += f"{note}--"  # Add the note to the correct string
                         else:
                             tabs[i] += "---"  # Add dashes for other strings
+
+            for i in range(len(tabs)):
+                tabs[i] += "|"
+    
         return tabs[::-1]
 
     
